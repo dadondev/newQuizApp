@@ -15,5 +15,6 @@ export const Route = createFileRoute("/test/$test")({
   loader: async ({ params: { test } }) => {
     await getData(test);
   },
+  beforeLoad: () => <span className="text-4xl block text-center">Loading</span>,
   component: () => <Test data={singleData[0]} />,
 });

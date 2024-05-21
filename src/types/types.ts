@@ -12,7 +12,7 @@ export interface IIconBtn {
 
 export interface IQuizCard {
   howMuch: number;
-  name: string;
+  name: string; 
   id: string;
 }
 
@@ -20,6 +20,7 @@ export interface IQuiz {
   id: string;
   name: string;
   quizs: ISingleQuiz[];
+  results: userResult[];
 }
 
 export interface ISingleQuiz {
@@ -27,4 +28,23 @@ export interface ISingleQuiz {
   question: string;
   trueAnswer: string;
   variants: object;
+}
+
+export interface ISingleRes {
+  userAnswer: string;
+  trueAnswer: string;
+  equal: boolean;
+}
+
+export interface userResult {
+  name: string;
+  results: ISingleRes[];
+}
+
+export interface quizContainer {
+  id: string;
+  name: string;
+  quizs: ISingleQuiz[];
+  results: userResult[];
+  time: string;
 }

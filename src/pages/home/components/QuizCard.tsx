@@ -12,7 +12,7 @@ const QuizCard = ({ howMuch, id, name }: IQuizCard) => {
   }, []);
 
   return (
-    <div className="w-[300px] p-4 rounded-lg bg-slate-50/10 backdrop-blur-md relative shadow-lg">
+    <div className="w-[300px] p-4 rounded-lg bg-slate-50/5 backdrop-blur-md relative shadow-lg">
       <h1 className="text-2xl text-text font-bold mb-2 capitalize">{name}</h1>
       <span className="text-gray-400 text-lg font-semibold mb-2">
         Savollar soni: <span className="text-text">{howMuch} ta</span>

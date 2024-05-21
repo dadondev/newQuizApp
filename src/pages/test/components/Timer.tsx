@@ -1,13 +1,16 @@
 import { useNavigate } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 
-const Timer = ({ howMuch }: { howMuch: number }) => {
+const Timer = ({
+
+  setTime,
+  time,
+}: {
+  time: string;
+  setTime: Dispatch<SetStateAction<string>>;
+}) => {
   const navigate = useNavigate();
   const timerRef = useRef<any>();
-  const [time, setTime] = useState(
-    howMuch > 9 ? howMuch + ":00" : "0" + howMuch + ":00"
-  );
-
   useEffect(() => {
     timerRef.current = setInterval(() => workTimer(), 1000);
   }, []);

@@ -1,8 +1,5 @@
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import { auth } from "../general/utils/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth, baseUrl } from "../general/utils/firebase";
 
 const admin = [
   "dadondev@gmail.com",
@@ -29,35 +26,62 @@ async function authentication({
 }) {
   setLoading(false);
   if (type === "login") {
-    signInWithEmailAndPassword(auth, data.email, data.password)
-      .then((e) => {
-        if (admin.includes(data.email))
-          localStorage.setItem("testAdmin", "true");
-        if (e.user.email)
-          navigate({
-            to: "/",
-          });
-      })
-      .catch((e) => {
-        toast.error(e);
+    loginUserMailAndPassword({
+      email: data.email,
+      password: data.password,
+    }).then((e) => {
+      if (admin.includes(e.data.email)) {
+        localStorage.setItem("testAdmin", "true");
+      }
+      localStorage.setItem("userToken", e.token);
+      toast.success("Kirish muvaffaqiyatli!");
+      navigate({
+        to: "/",
       });
+    });
   }
   if (type === "register") {
-    createUserWithEmailAndPassword(auth, data.email, data.password)
-      .then((e) => {
-        if (e.user.email) {
-          if (admin.includes(data.email))
-            localStorage.setItem("testAdmin", "true");
-          navigate({
-            to: "/",
-          });
-        }
-      })
-      .catch((e) => {
-        toast.error(e);
+    createUserMailAndPassword({
+      email: data.email,
+      password: data.password,
+      fullname: data.email.slice(0, data.email.indexOf("@")),
+    }).then((e) => {
+      localStorage.setItem("userToken", e.token);
+      if (admin.includes(e.data.email)) {
+        localStorage.setItem("testAdmin", "true");
+      }
+      toast.success("Ro'yhatdan o'tish muvaffaqiyatli!");
+      navigate({
+        to: "/",
       });
+    });
   }
   setLoading(false);
 }
 
+const createUserMailAndPassword = async (data: object) => {
+  const res = await fetch(baseUrl + "register", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const resData = await res.json();
+  return resData;
+};
+const loginUserMailAndPassword = async (data: object) => {
+  const resp = await fetch(baseUrl + "auth", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  const resData = await resp.json();
+  return resData;
+};
 export { authentication };

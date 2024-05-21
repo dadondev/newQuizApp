@@ -6,10 +6,8 @@ const Protect = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   useEffect(() => {
-    auth.authStateReady().finally(() => {
-      if (!auth.currentUser) navigate({ to: "/auth" });
-      setLoading(false);
-    });
+    if (!localStorage.getItem("userToken")) navigate({ to: "/auth" });
+    setLoading(false);
   }, []);
   if (loading)
     return (
